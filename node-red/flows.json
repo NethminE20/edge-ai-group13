@@ -7,160 +7,6 @@
         "info": ""
     },
     {
-        "id": "mqtt-broker",
-        "type": "mqtt-broker",
-        "name": "MQTT Broker",
-        "broker": "mqtt",
-        "port": "1883",
-        "clientid": "",
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true
-    },
-    {
-        "id": "mqtt-in-data",
-        "type": "mqtt in",
-        "z": "tab1",
-        "name": "Sensor Data",
-        "topic": "sensors/group01/fire/data",
-        "qos": "0",
-        "datatype": "auto",
-        "broker": "mqtt-broker",
-        "x": 150,
-        "y": 100,
-        "wires": [
-            [
-                "json-data"
-            ]
-        ]
-    },
-    {
-        "id": "json-data",
-        "type": "json",
-        "z": "tab1",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 350,
-        "y": 100,
-        "wires": [
-            [
-                "chart",
-                "gauge"
-            ]
-        ]
-    },
-    {
-        "id": "chart",
-        "type": "ui_chart",
-        "z": "tab1",
-        "name": "Gas Level",
-        "group": "ui-group",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "label": "Gas Level",
-        "chartType": "line",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "0",
-        "ymax": "20",
-        "removeOlder": "1",
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "colors": [
-            "#1f77b4"
-        ],
-        "useOldStyle": false,
-        "x": 600,
-        "y": 80,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "gauge",
-        "type": "ui_gauge",
-        "z": "tab1",
-        "name": "Gas Gauge",
-        "group": "ui-group",
-        "order": 2,
-        "width": 0,
-        "height": 0,
-        "gtype": "gage",
-        "title": "Gas Level",
-        "label": "ppm",
-        "format": "{{value}}",
-        "min": 0,
-        "max": 20,
-        "colors": [
-            "green",
-            "yellow",
-            "red"
-        ],
-        "seg1": "5",
-        "seg2": "10",
-        "x": 600,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "mqtt-in-alert",
-        "type": "mqtt in",
-        "z": "tab1",
-        "name": "Alerts",
-        "topic": "alerts/group01/fire/status",
-        "qos": "0",
-        "datatype": "auto",
-        "broker": "mqtt-broker",
-        "x": 150,
-        "y": 220,
-        "wires": [
-            [
-                "json-alert"
-            ]
-        ]
-    },
-    {
-        "id": "json-alert",
-        "type": "json",
-        "z": "tab1",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 350,
-        "y": 220,
-        "wires": [
-            [
-                "text"
-            ]
-        ]
-    },
-    {
-        "id": "text",
-        "type": "ui_text",
-        "z": "tab1",
-        "group": "ui-group",
-        "order": 3,
-        "width": 0,
-        "height": 0,
-        "name": "Alert Text",
-        "label": "Status",
-        "format": "{{msg.payload.status}}",
-        "layout": "row-spread",
-        "x": 600,
-        "y": 220,
-        "wires": []
-    },
-    {
         "id": "ui-tab",
         "type": "ui_tab",
         "name": "Dashboard",
@@ -175,5 +21,214 @@
         "order": 1,
         "disp": true,
         "width": "6"
+    },
+    {
+        "id": "7ebd0739e625f3e9",
+        "type": "mqtt-broker",
+        "name": "MQTT",
+        "broker": "mqtt",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "mqtt-in",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "Alerts",
+        "topic": "alerts/group01/fire/status",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "7ebd0739e625f3e9",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 120,
+        "y": 120,
+        "wires": [
+            [
+                "json"
+            ]
+        ]
+    },
+    {
+        "id": "json",
+        "type": "json",
+        "z": "tab1",
+        "name": "Parse JSON",
+        "property": "payload",
+        "x": 300,
+        "y": 120,
+        "wires": [
+            [
+                "extract-gas",
+                "extract-status",
+                "alarm-check"
+            ]
+        ]
+    },
+    {
+        "id": "extract-gas",
+        "type": "function",
+        "z": "tab1",
+        "name": "Extract Gas",
+        "func": "msg.payload = msg.payload.gas;\nreturn msg;",
+        "outputs": 1,
+        "x": 520,
+        "y": 80,
+        "wires": [
+            [
+                "gauge",
+                "chart"
+            ]
+        ]
+    },
+    {
+        "id": "extract-status",
+        "type": "function",
+        "z": "tab1",
+        "name": "Extract Status",
+        "func": "msg.payload = msg.payload.status;\nreturn msg;",
+        "outputs": 1,
+        "x": 530,
+        "y": 140,
+        "wires": [
+            [
+                "status"
+            ]
+        ]
+    },
+    {
+        "id": "alarm-check",
+        "type": "function",
+        "z": "tab1",
+        "name": "Trigger Alarm",
+        "func": "if(msg.payload.status !== \"Normal\") {\n    msg.payload = \"🚨 ALERT: \" + msg.payload.status;\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "x": 520,
+        "y": 200,
+        "wires": [
+            [
+                "notification",
+                "buzzer"
+            ]
+        ]
+    },
+    {
+        "id": "gauge",
+        "type": "ui_gauge",
+        "z": "tab1",
+        "name": "Gas Gauge",
+        "group": "ui-group",
+        "order": 1,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Gas Level",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 20,
+        "colors": [
+            "green",
+            "yellow",
+            "red"
+        ],
+        "seg1": "5",
+        "seg2": "10",
+        "x": 750,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "chart",
+        "type": "ui_chart",
+        "z": "tab1",
+        "name": "Gas Trend",
+        "group": "ui-group",
+        "order": 2,
+        "width": 6,
+        "height": 4,
+        "label": "Gas Trend",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "ymin": "0",
+        "ymax": "20",
+        "removeOlder": "10",
+        "removeOlderUnit": "60",
+        "outputs": 1,
+        "x": 760,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "status",
+        "type": "ui_text",
+        "z": "tab1",
+        "group": "ui-group",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "label": "Status",
+        "format": "{{msg.payload}}",
+        "x": 760,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "notification",
+        "type": "ui_text",
+        "z": "tab1",
+        "group": "ui-group",
+        "order": 4,
+        "width": 6,
+        "height": 1,
+        "label": "ALERT",
+        "format": "{{msg.payload}}",
+        "x": 760,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "buzzer",
+        "type": "ui_template",
+        "z": "tab1",
+        "group": "ui-group",
+        "name": "Alarm Sound",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "format": "<audio autoplay>\n  <source src=\"https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg\" type=\"audio/ogg\">\n</audio>",
+        "x": 760,
+        "y": 300,
+        "wires": [
+            []
+        ]
     }
 ]

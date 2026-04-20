@@ -1,14 +1,14 @@
 import json
 import time
 import numpy as np
-import pandas as pd
 import paho.mqtt.client as mqtt
 import joblib
+import pandas as pd
 
-# Load trained model
-model = joblib.load("model.pkl")
+# Load model + scaler
+model = joblib.load("co_model.pkl")
+scaler = joblib.load("scaler.pkl")
 
-# MQTT setup
 broker = "mqtt"
 data_topic = "sensors/group01/fire/data"
 alert_topic = "alerts/group01/fire/status"
@@ -25,16 +25,21 @@ while True:
         time.sleep(2)
 
 def is_anomaly(value):
-    value = np.array([[value]])
-    prediction = model.predict(value)
-    return prediction[0] == -1  # -1 = anomaly
+    value_df = pd.DataFrame([[value]], columns=["CO"])
+    value_scaled = scaler.transform(value_df)
+    prediction = model.predict(value_scaled)
+
+    print(f"RAW: {value}, SCALED: {value_scaled}, PRED: {prediction}")
+
+    return prediction[0] == -1
 
 def on_message(client, userdata, msg):
     data = json.loads(msg.payload)
     gas = data["gas"]
 
+    # Hybrid logic 
     if gas > 8:
-        status = "🔥 FIRE (Critical Threshold)"
+        status = "🔥 FIRE (Threshold)"
     elif is_anomaly(gas):
         status = "⚠️ ANOMALY (ML)"
     else:
