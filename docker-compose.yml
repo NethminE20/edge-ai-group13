@@ -25,3 +25,4 @@ services:
     container_name: python-edge
     depends_on:
       - mqtt
+    command: python main.py
