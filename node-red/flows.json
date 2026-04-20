@@ -1,0 +1,179 @@
+[
+    {
+        "id": "tab1",
+        "type": "tab",
+        "label": "Fire Monitoring",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "mqtt-broker",
+        "type": "mqtt-broker",
+        "name": "MQTT Broker",
+        "broker": "mqtt",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true
+    },
+    {
+        "id": "mqtt-in-data",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "Sensor Data",
+        "topic": "sensors/group01/fire/data",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "mqtt-broker",
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "json-data"
+            ]
+        ]
+    },
+    {
+        "id": "json-data",
+        "type": "json",
+        "z": "tab1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 350,
+        "y": 100,
+        "wires": [
+            [
+                "chart",
+                "gauge"
+            ]
+        ]
+    },
+    {
+        "id": "chart",
+        "type": "ui_chart",
+        "z": "tab1",
+        "name": "Gas Level",
+        "group": "ui-group",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Gas Level",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "20",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4"
+        ],
+        "useOldStyle": false,
+        "x": 600,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "gauge",
+        "type": "ui_gauge",
+        "z": "tab1",
+        "name": "Gas Gauge",
+        "group": "ui-group",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Gas Level",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 20,
+        "colors": [
+            "green",
+            "yellow",
+            "red"
+        ],
+        "seg1": "5",
+        "seg2": "10",
+        "x": 600,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "mqtt-in-alert",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "Alerts",
+        "topic": "alerts/group01/fire/status",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "mqtt-broker",
+        "x": 150,
+        "y": 220,
+        "wires": [
+            [
+                "json-alert"
+            ]
+        ]
+    },
+    {
+        "id": "json-alert",
+        "type": "json",
+        "z": "tab1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 350,
+        "y": 220,
+        "wires": [
+            [
+                "text"
+            ]
+        ]
+    },
+    {
+        "id": "text",
+        "type": "ui_text",
+        "z": "tab1",
+        "group": "ui-group",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "Alert Text",
+        "label": "Status",
+        "format": "{{msg.payload.status}}",
+        "layout": "row-spread",
+        "x": 600,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "ui-tab",
+        "type": "ui_tab",
+        "name": "Dashboard",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "ui-group",
+        "type": "ui_group",
+        "name": "Fire Monitoring",
+        "tab": "ui-tab",
+        "order": 1,
+        "disp": true,
+        "width": "6"
+    }
+]
