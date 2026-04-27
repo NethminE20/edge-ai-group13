@@ -1,12 +1,12 @@
-# Node-RED
-node-red/node_modules/
-node-red/.npm/
-node-red/lib/
-
-# Node-RED runtime files
-node-red/.config.*
-node-red/flows_cred.json
-node-red/*.backup
+# Security - NEVER COMMIT THESE
+mosquitto/passwords.txt
+mosquitto/acl.txt
+*.pem
+*.key
+*.cert
+credentials.json
+.env
+.env.local
 
 # Python
 __pycache__/

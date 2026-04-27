@@ -1,0 +1,354 @@
+[
+    {
+        "id": "d6634526aba5f013",
+        "type": "tab",
+        "label": "Fire Monitoring",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "ui-tab",
+        "type": "ui_tab",
+        "name": "Dashboard",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "ui-group",
+        "type": "ui_group",
+        "name": "Fire Monitoring",
+        "tab": "ui-tab",
+        "order": 1,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "7ebd0739e625f3e9",
+        "type": "mqtt-broker",
+        "name": "MQTT",
+        "broker": "mqtt",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "2ea5e0a4829fdd23",
+        "type": "mqtt in",
+        "z": "d6634526aba5f013",
+        "name": "Alerts",
+        "topic": "alerts/group01/fire/status",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "7ebd0739e625f3e9",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 120,
+        "y": 120,
+        "wires": [
+            [
+                "28a215aa4bf16452"
+            ]
+        ]
+    },
+    {
+        "id": "28a215aa4bf16452",
+        "type": "json",
+        "z": "d6634526aba5f013",
+        "name": "Parse JSON",
+        "property": "payload",
+        "x": 300,
+        "y": 120,
+        "wires": [
+            [
+                "41a50927eefb967d",
+                "033eb585c2a769f6",
+                "48981fc67fe9b1b3"
+            ]
+        ]
+    },
+    {
+        "id": "41a50927eefb967d",
+        "type": "function",
+        "z": "d6634526aba5f013",
+        "name": "Extract Gas",
+        "func": "msg.payload = msg.payload.gas;\nreturn msg;",
+        "outputs": 1,
+        "x": 520,
+        "y": 80,
+        "wires": [
+            [
+                "b6fcc21472803630",
+                "42757a96eed1e9e2"
+            ]
+        ]
+    },
+    {
+        "id": "033eb585c2a769f6",
+        "type": "function",
+        "z": "d6634526aba5f013",
+        "name": "Extract Status",
+        "func": "msg.payload = msg.payload.status;\nreturn msg;",
+        "outputs": 1,
+        "x": 530,
+        "y": 140,
+        "wires": [
+            [
+                "512abff3625ecaa5"
+            ]
+        ]
+    },
+    {
+        "id": "48981fc67fe9b1b3",
+        "type": "function",
+        "z": "d6634526aba5f013",
+        "name": "Trigger Alarm",
+        "func": "if(msg.payload.status !== \"Normal\") {\n    msg.payload = \"🚨 ALERT: \" + msg.payload.status;\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "x": 520,
+        "y": 200,
+        "wires": [
+            [
+                "683966fd27d1feeb",
+                "0e52d27e1604d1fc"
+            ]
+        ]
+    },
+    {
+        "id": "b6fcc21472803630",
+        "type": "ui_gauge",
+        "z": "d6634526aba5f013",
+        "name": "Gas Gauge",
+        "group": "ui-group",
+        "order": 1,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Gas Level",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 20,
+        "colors": [
+            "green",
+            "yellow",
+            "red"
+        ],
+        "seg1": "5",
+        "seg2": "10",
+        "x": 750,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "42757a96eed1e9e2",
+        "type": "ui_chart",
+        "z": "d6634526aba5f013",
+        "name": "Gas Trend",
+        "group": "ui-group",
+        "order": 2,
+        "width": 6,
+        "height": 4,
+        "label": "Gas Trend",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "ymin": "0",
+        "ymax": "20",
+        "removeOlder": "10",
+        "removeOlderUnit": "60",
+        "outputs": 1,
+        "x": 760,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "512abff3625ecaa5",
+        "type": "ui_text",
+        "z": "d6634526aba5f013",
+        "group": "ui-group",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "label": "Status",
+        "format": "{{msg.payload}}",
+        "x": 760,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "683966fd27d1feeb",
+        "type": "ui_text",
+        "z": "d6634526aba5f013",
+        "group": "ui-group",
+        "order": 4,
+        "width": 6,
+        "height": 1,
+        "label": "ALERT",
+        "format": "{{msg.payload}}",
+        "x": 760,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "0e52d27e1604d1fc",
+        "type": "ui_template",
+        "z": "d6634526aba5f013",
+        "group": "ui-group",
+        "name": "Alarm Sound",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "format": "<audio autoplay>\n  <source src=\"https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg\" type=\"audio/ogg\">\n</audio>",
+        "x": 760,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bf362dbe46dd2431",
+        "type": "ui_button",
+        "z": "d6634526aba5f013",
+        "name": "Fan ON",
+        "group": "ui-group",
+        "order": 6,
+        "label": "✓ ON",
+        "color": "white",
+        "bgcolor": "#28a745",
+        "payload": "{\"command\":\"ON\"}",
+        "payloadType": "json",
+        "topic": "commands/group01/fire/fan/control",
+        "x": 120,
+        "y": 360,
+        "wires": [
+            [
+                "56ebcc13e3990a0a"
+            ]
+        ]
+    },
+    {
+        "id": "28c72b500cf4ab57",
+        "type": "ui_button",
+        "z": "d6634526aba5f013",
+        "name": "Fan OFF",
+        "group": "ui-group",
+        "order": 7,
+        "label": "⏹ OFF",
+        "color": "white",
+        "bgcolor": "#dc3545",
+        "payload": "{\"command\":\"OFF\"}",
+        "payloadType": "json",
+        "topic": "commands/group01/fire/fan/control",
+        "x": 120,
+        "y": 400,
+        "wires": [
+            [
+                "56ebcc13e3990a0a"
+            ]
+        ]
+    },
+    {
+        "id": "b575e96ad0f4174c",
+        "type": "ui_button",
+        "z": "d6634526aba5f013",
+        "name": "Fan AUTO",
+        "group": "ui-group",
+        "order": 8,
+        "label": "🤖 AUTO",
+        "color": "white",
+        "bgcolor": "#0056b3",
+        "payload": "{\"command\":\"AUTO\"}",
+        "payloadType": "json",
+        "topic": "commands/group01/fire/fan/control",
+        "x": 120,
+        "y": 440,
+        "wires": [
+            [
+                "56ebcc13e3990a0a"
+            ]
+        ]
+    },
+    {
+        "id": "56ebcc13e3990a0a",
+        "type": "mqtt out",
+        "z": "d6634526aba5f013",
+        "name": "Send Fan Command",
+        "topic": "commands/group01/fire/fan/control",
+        "broker": "7ebd0739e625f3e9",
+        "x": 340,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "a5cb64bcd3835fae",
+        "type": "mqtt in",
+        "z": "d6634526aba5f013",
+        "name": "Fan State",
+        "topic": "actuators/group01/fire/fan/state",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "7ebd0739e625f3e9",
+        "inputs": 0,
+        "x": 120,
+        "y": 500,
+        "wires": [
+            [
+                "41b70da652227b22"
+            ]
+        ]
+    },
+    {
+        "id": "41b70da652227b22",
+        "type": "json",
+        "z": "d6634526aba5f013",
+        "name": "Parse Fan State",
+        "property": "payload",
+        "x": 320,
+        "y": 500,
+        "wires": [
+            [
+                "4b2736c696fecde6"
+            ]
+        ]
+    },
+    {
+        "id": "4b2736c696fecde6",
+        "type": "ui_text",
+        "z": "d6634526aba5f013",
+        "group": "ui-group",
+        "order": 9,
+        "width": 6,
+        "height": 1,
+        "label": "Fan Status",
+        "format": "{{msg.payload.fan}} ({{msg.payload.mode}})",
+        "x": 540,
+        "y": 500,
+        "wires": []
+    }
+]
