@@ -3,27 +3,49 @@ version: '3.8'
 services:
 
   mqtt:
-    image: eclipse-mosquitto:2.0
+    build:
+      context: ./mosquitto
+      dockerfile: Dockerfile
     container_name: mqtt
+    networks:
+      - edge-ai-network
     ports:
       - "1883:1883"
     volumes:
       - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/passwords.txt:/mosquitto/config/passwords.txt
+      - ./mosquitto/acl.txt:/mosquitto/config/acl.txt
+    healthcheck:
+      test: ["CMD", "sh", "-c", "mosquitto_sub -h localhost -u edge-ai -P edge123 -t '$SYS/broker/version' -W 1 || sleep 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
 
   node-red:
     image: nodered/node-red:latest
     container_name: node-red
+    networks:
+      - edge-ai-network
     ports:
       - "1880:1880"
     volumes:
       - ./node-red:/data
     command: /bin/sh -c "cd /data && npm install --no-audit --no-fund && npm start -- --userDir /data"
     depends_on:
-      - mqtt
+      mqtt:
+        condition: service_healthy
 
   python-edge:
     build: ./python
     container_name: python-edge
+    networks:
+      - edge-ai-network
     depends_on:
-      - mqtt
+      mqtt:
+        condition: service_healthy
     command: python main.py
+
+networks:
+  edge-ai-network:
+    driver: bridge

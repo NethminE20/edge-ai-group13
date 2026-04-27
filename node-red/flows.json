@@ -1,6 +1,6 @@
 [
     {
-        "id": "tab1",
+        "id": "d6634526aba5f013",
         "type": "tab",
         "label": "Fire Monitoring",
         "disabled": false,
@@ -54,11 +54,107 @@
         "sessionExpiry": ""
     },
     {
-        "id": "mqtt-in",
+        "id": "937b9210871e8f4c",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "2ea5e0a4829fdd23",
         "type": "mqtt in",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "name": "Alerts",
-        "topic": "alerts/group01/fire/status",
+        "topic": "factory/group01/fire/detector/alert",
         "qos": "0",
         "datatype": "auto",
         "broker": "7ebd0739e625f3e9",
@@ -69,30 +165,30 @@
         "y": 120,
         "wires": [
             [
-                "json"
+                "28a215aa4bf16452"
             ]
         ]
     },
     {
-        "id": "json",
+        "id": "28a215aa4bf16452",
         "type": "json",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "name": "Parse JSON",
         "property": "payload",
         "x": 300,
         "y": 120,
         "wires": [
             [
-                "extract-gas",
-                "extract-status",
-                "alarm-check"
+                "41a50927eefb967d",
+                "033eb585c2a769f6",
+                "48981fc67fe9b1b3"
             ]
         ]
     },
     {
-        "id": "extract-gas",
+        "id": "41a50927eefb967d",
         "type": "function",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "name": "Extract Gas",
         "func": "msg.payload = msg.payload.gas;\nreturn msg;",
         "outputs": 1,
@@ -100,15 +196,15 @@
         "y": 80,
         "wires": [
             [
-                "gauge",
-                "chart"
+                "b6fcc21472803630",
+                "42757a96eed1e9e2"
             ]
         ]
     },
     {
-        "id": "extract-status",
+        "id": "033eb585c2a769f6",
         "type": "function",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "name": "Extract Status",
         "func": "msg.payload = msg.payload.status;\nreturn msg;",
         "outputs": 1,
@@ -116,14 +212,14 @@
         "y": 140,
         "wires": [
             [
-                "status"
+                "512abff3625ecaa5"
             ]
         ]
     },
     {
-        "id": "alarm-check",
+        "id": "48981fc67fe9b1b3",
         "type": "function",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "name": "Trigger Alarm",
         "func": "if(msg.payload.status !== \"Normal\") {\n    msg.payload = \"🚨 ALERT: \" + msg.payload.status;\n    return msg;\n}\nreturn null;",
         "outputs": 1,
@@ -131,15 +227,15 @@
         "y": 200,
         "wires": [
             [
-                "notification",
-                "buzzer"
+                "683966fd27d1feeb",
+                "0e52d27e1604d1fc"
             ]
         ]
     },
     {
-        "id": "gauge",
+        "id": "b6fcc21472803630",
         "type": "ui_gauge",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "name": "Gas Gauge",
         "group": "ui-group",
         "order": 1,
@@ -163,9 +259,9 @@
         "wires": []
     },
     {
-        "id": "chart",
+        "id": "42757a96eed1e9e2",
         "type": "ui_chart",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "name": "Gas Trend",
         "group": "ui-group",
         "order": 2,
@@ -188,9 +284,9 @@
         ]
     },
     {
-        "id": "status",
+        "id": "512abff3625ecaa5",
         "type": "ui_text",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "group": "ui-group",
         "order": 3,
         "width": 6,
@@ -202,9 +298,9 @@
         "wires": []
     },
     {
-        "id": "notification",
+        "id": "683966fd27d1feeb",
         "type": "ui_text",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "group": "ui-group",
         "order": 4,
         "width": 6,
@@ -216,9 +312,9 @@
         "wires": []
     },
     {
-        "id": "buzzer",
+        "id": "0e52d27e1604d1fc",
         "type": "ui_template",
-        "z": "tab1",
+        "z": "d6634526aba5f013",
         "group": "ui-group",
         "name": "Alarm Sound",
         "order": 5,
@@ -230,5 +326,125 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "bf362dbe46dd2431",
+        "type": "ui_button",
+        "z": "d6634526aba5f013",
+        "name": "Fan ON",
+        "group": "ui-group",
+        "order": 6,
+        "label": "✓ ON",
+        "color": "white",
+        "bgcolor": "#28a745",
+        "payload": "{\"command\":\"ON\"}",
+        "payloadType": "json",
+        "topic": "commands/group01/fire/fan/control",
+        "x": 120,
+        "y": 360,
+        "wires": [
+            [
+                "56ebcc13e3990a0a"
+            ]
+        ]
+    },
+    {
+        "id": "28c72b500cf4ab57",
+        "type": "ui_button",
+        "z": "d6634526aba5f013",
+        "name": "Fan OFF",
+        "group": "ui-group",
+        "order": 7,
+        "label": "⏹ OFF",
+        "color": "white",
+        "bgcolor": "#dc3545",
+        "payload": "{\"command\":\"OFF\"}",
+        "payloadType": "json",
+        "topic": "commands/group01/fire/fan/control",
+        "x": 120,
+        "y": 400,
+        "wires": [
+            [
+                "56ebcc13e3990a0a"
+            ]
+        ]
+    },
+    {
+        "id": "b575e96ad0f4174c",
+        "type": "ui_button",
+        "z": "d6634526aba5f013",
+        "name": "Fan AUTO",
+        "group": "ui-group",
+        "order": 8,
+        "label": "🤖 AUTO",
+        "color": "white",
+        "bgcolor": "#0056b3",
+        "payload": "{\"command\":\"AUTO\"}",
+        "payloadType": "json",
+        "topic": "commands/group01/fire/fan/control",
+        "x": 120,
+        "y": 440,
+        "wires": [
+            [
+                "56ebcc13e3990a0a"
+            ]
+        ]
+    },
+    {
+        "id": "56ebcc13e3990a0a",
+        "type": "mqtt out",
+        "z": "d6634526aba5f013",
+        "name": "Send Fan Command",
+        "topic": "commands/group01/fire/fan/control",
+        "broker": "7ebd0739e625f3e9",
+        "x": 340,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "a5cb64bcd3835fae",
+        "type": "mqtt in",
+        "z": "d6634526aba5f013",
+        "name": "Fan State",
+        "topic": "actuators/group01/fire/fan/state",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "7ebd0739e625f3e9",
+        "inputs": 0,
+        "x": 120,
+        "y": 500,
+        "wires": [
+            [
+                "41b70da652227b22"
+            ]
+        ]
+    },
+    {
+        "id": "41b70da652227b22",
+        "type": "json",
+        "z": "d6634526aba5f013",
+        "name": "Parse Fan State",
+        "property": "payload",
+        "x": 320,
+        "y": 500,
+        "wires": [
+            [
+                "4b2736c696fecde6"
+            ]
+        ]
+    },
+    {
+        "id": "4b2736c696fecde6",
+        "type": "ui_text",
+        "z": "d6634526aba5f013",
+        "group": "ui-group",
+        "order": 9,
+        "width": 6,
+        "height": 1,
+        "label": "Fan Status",
+        "format": "{{msg.payload.fan}} ({{msg.payload.mode}})",
+        "x": 540,
+        "y": 500,
+        "wires": []
     }
 ]
