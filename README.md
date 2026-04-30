@@ -271,10 +271,6 @@ jupyter notebook "ML model/Training Code.ipynb"
 2. Verify command topic: `mosquitto_pub -h localhost -t "commands/group01/fire/fan/control" -m '{"command":"ON"}'`
 3. Monitor fan state: `mosquitto_sub -h localhost -t "actuators/group01/fire/fan/state"`
 
-## 📝 License
-
-MIT License - See LICENSE file for details
-
 ## 👥 Authors
 
 Group 13 - IoT & Edge AI Project
