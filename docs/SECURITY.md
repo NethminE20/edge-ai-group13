@@ -5,7 +5,6 @@
 ### Overview
 - **Restricted broker access** - No anonymous clients allowed
 - **Secure communication** between Edge AI and Dashboard
-- **Access Control Lists (ACL)** - Role-based topic permissions
 
 ### Implementation Details
 
@@ -22,26 +21,6 @@ Three authenticated users:
 - **edge-ai** (password: edge123) - Publisher & Detector
 - **dashboard** (password: dash123) - Node-RED UI
 - **simulator** (password: sim123) - Data simulator
-
-#### 3. **Access Control List** (`mosquitto/acl.txt`)
-
-**Edge AI Permissions:**
-```
-user edge-ai
-topic write sensors/group01/fire/data      # Can publish
-topic write alerts/group01/fire/status     # Can publish
-topic read commands/group01/fire/fan/control # Can subscribe
-topic write actuators/group01/fire/fan/state # Can publish
-```
-
-**Dashboard Permissions:**
-```
-user dashboard
-topic read sensors/group01/fire/data
-topic read alerts/group01/fire/status
-topic read actuators/group01/fire/fan/state
-topic write commands/group01/fire/fan/control
-```
 
 #### 4. **Python Implementation**
 ```python
