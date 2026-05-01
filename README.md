@@ -60,7 +60,7 @@ See [SETUP.md](SETUP.md) for detailed local setup instructions.
 - Loads historical CO data from `AirQuality.csv`
 - Simulates real-time sensor readings
 - Injects 5% anomalies for testing
-- **Topic**: `sensors/group01/fire/data`
+- **Topic**: `sensors/group13/fire/data`
 
 ### 3. **ML Detector** (`python/edge_ai.py`)
 - **Algorithm**: Isolation Forest (Scikit-learn)
@@ -69,7 +69,7 @@ See [SETUP.md](SETUP.md) for detailed local setup instructions.
   - `gas > 8 ppm` → 🔥 FIRE (Threshold)
   - ML Anomaly → ⚠️ ANOMALY
   - Normal → ✓ Normal
-- **Output Topic**: `alerts/group01/fire/status`
+- **Output Topic**: `alerts/group13/fire/status`
 - **Automatic Control**: Triggers fan when threshold or anomaly detected
 
 ### 4. **Fan Actuator Controller** (`python/actuator_controller.py`) 🔴 NEW
@@ -77,8 +77,8 @@ See [SETUP.md](SETUP.md) for detailed local setup instructions.
 - **Auto Mode**: Fan turns ON when CO > 8 ppm or anomaly detected
 - **Manual Mode**: Controlled via dashboard buttons
 - Supports three commands: ON, OFF, AUTO
-- **Command Topic**: `commands/group01/fire/fan/control`
-- **State Topic**: `actuators/group01/fire/fan/state`
+- **Command Topic**: `commands/group13/fire/fan/control`
+- **State Topic**: `actuators/group13/fire/fan/state`
 
 ### 5. **Node-RED Dashboard** (Port 1880)
 - Real-time CO level gauge and trend chart
@@ -96,10 +96,10 @@ See [SETUP.md](SETUP.md) for detailed local setup instructions.
 
 | Topic | Direction | Purpose | Format |
 |-------|-----------|---------|--------|
-| `sensors/group01/fire/data` | Pub → Broker | Raw sensor readings | `{"gas": 2.5, "timestamp": 1234567890}` |
-| `alerts/group01/fire/status` | Detector → Dashboard | Alert notifications | `{"gas": 2.5, "status": "✓ Normal"}` |
-| `commands/group01/fire/fan/control` | Dashboard → Fan | Fan control commands | `{"command": "ON"}` |
-| `actuators/group01/fire/fan/state` | Fan → Dashboard | Fan state feedback | `{"fan": "ON", "mode": "MANUAL"}` |
+| `sensors/group13/fire/data` | Pub → Broker | Raw sensor readings | `{"gas": 2.5, "timestamp": 1234567890}` |
+| `alerts/group13/fire/status` | Detector → Dashboard | Alert notifications | `{"gas": 2.5, "status": "✓ Normal"}` |
+| `commands/group13/fire/fan/control` | Dashboard → Fan | Fan control commands | `{"command": "ON"}` |
+| `actuators/group13/fire/fan/state` | Fan → Dashboard | Fan state feedback | `{"fan": "ON", "mode": "MANUAL"}` |
 
 ### Service Ports
 
@@ -161,7 +161,7 @@ edge-ai-group13/
 │   ├── main.py                 # Entry point (runs all processes)
 │   ├── mqtt_publisher.py       # Sensor data publisher
 │   ├── edge_ai.py              # ML anomaly detector
-│   ├── actuator_controller.py  # 🔴 NEW: Exhaust fan control
+│   ├── actuator_controller.py  # Exhaust fan control
 │   ├── test_model.py           # Model testing script
 │   ├── requirements.txt         # Python dependencies
 │   ├── Dockerfile              # Python container image
@@ -207,12 +207,12 @@ docker-compose up --build
 3. Run detector: `python python/edge_ai.py`
 4. Check messages: 
    ```bash
-   mosquitto_sub -h localhost -t "alerts/group01/fire/status"
-   mosquitto_sub -h localhost -t "actuators/group01/fire/fan/state"
+   mosquitto_sub -h localhost -t "alerts/group13/fire/status"
+   mosquitto_sub -h localhost -t "actuators/group13/fire/fan/state"
    ```
 5. Control fan:
    ```bash
-   mosquitto_pub -h localhost -t "commands/group01/fire/fan/control" -m '{"command":"ON"}'
+   mosquitto_pub -h localhost -t "commands/group13/fire/fan/control" -m '{"command":"ON"}'
    ```
 
 ## 📚 Dependencies
@@ -264,12 +264,12 @@ jupyter notebook "ML model/Training Code.ipynb"
 ### No Data in Dashboard
 1. Check publisher logs: `docker logs python-edge`
 2. Check detector logs: `docker logs python-edge`
-3. Verify MQTT subscription: `mosquitto_sub -h localhost -t "sensors/group01/fire/data"`
+3. Verify MQTT subscription: `mosquitto_sub -h localhost -t "sensors/group13/fire/data"`
 
 ### Fan Not Responding
 1. Check fan controller logs in edge_ai output
-2. Verify command topic: `mosquitto_pub -h localhost -t "commands/group01/fire/fan/control" -m '{"command":"ON"}'`
-3. Monitor fan state: `mosquitto_sub -h localhost -t "actuators/group01/fire/fan/state"`
+2. Verify command topic: `mosquitto_pub -h localhost -t "commands/group13/fire/fan/control" -m '{"command":"ON"}'`
+3. Monitor fan state: `mosquitto_sub -h localhost -t "actuators/group13/fire/fan/state"`
 
 ## 👥 Authors
 
