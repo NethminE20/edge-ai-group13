@@ -46,8 +46,6 @@ docker-compose up --build
 
 Access dashboard: **http://localhost:1880/ui**
 
-### Local Development
-See [SETUP.md](SETUP.md) for detailed local setup instructions.
 
 ## 📊 System Components
 
@@ -228,8 +226,6 @@ docker-compose up --build
 **Node-RED**: Auto-installed from package.json
 
 ## 🤝 Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ### Ideas for Enhancement
 - Support multiple sensors and fans
