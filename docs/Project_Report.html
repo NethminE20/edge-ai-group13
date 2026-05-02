@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fire/Smoke Detection System - Group 13 Report</title>
+  <style>
+    :root {
+      --ink: #1f4b8f;
+      --teal: #0f7a83;
+      --muted: #5d6b7a;
+      --line: #cfd7e3;
+      --paper: #ffffff;
+      --soft: #f5f8fc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #eef3f8;
+      color: #1f2937;
+      font-family: "Segoe UI", Calibri, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 18px auto;
+      background: var(--paper);
+      box-shadow: 0 10px 35px rgba(18, 39, 66, 0.12);
+      padding: 26mm 18mm;
+    }
+
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 245mm;
+      text-align: center;
+    }
+
+    .cover-line {
+      height: 4px;
+      background: var(--teal);
+      width: 100%;
+    }
+
+    .dept {
+      margin-top: 18mm;
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: 0.4px;
+    }
+
+    .faculty {
+      color: #3d4f68;
+      font-size: 16px;
+      margin-top: 4px;
+    }
+
+    .course {
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 18px;
+      margin-top: 14px;
+    }
+
+    .title-wrap {
+      margin: 24mm 0 8mm;
+    }
+
+    .title-main {
+      color: var(--ink);
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0;
+      line-height: 1.12;
+    }
+
+    .title-accent {
+      color: var(--teal);
+      font-size: 34px;
+      font-weight: 800;
+      margin: 6px 0 0;
+      line-height: 1.14;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      font-style: italic;
+      font-size: 17px;
+      color: #4c5b71;
+    }
+
+    .cover-divider {
+      margin: 18mm 0 10mm;
+      border: 0;
+      border-top: 2px solid var(--line);
+    }
+
+    .group-block {
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .members {
+      margin-top: 16px;
+      display: inline-block;
+      text-align: left;
+      color: #31445d;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .section-title {
+      color: var(--ink);
+      font-size: 28px;
+      margin: 0 0 12px;
+      font-weight: 800;
+    }
+
+    h2 {
+      color: var(--ink);
+      font-size: 24px;
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      color: var(--teal);
+      font-size: 18px;
+      margin-top: 22px;
+      margin-bottom: 8px;
+    }
+
+    .reg-tag {
+      font-size: 0.7em;
+      color: #4c6587;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    p {
+      margin: 10px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 8px 0 14px 22px;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    .meta-box,
+    .toc,
+    .note-box {
+      background: var(--soft);
+      border: 1px solid #dbe5f0;
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+
+    .front-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 20px 0 8px;
+    }
+
+    .front-grid > div {
+      background: #fbfdff;
+      border: 1px solid #dbe5f0;
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+
+    .front-grid h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 17px;
+    }
+
+    .toc ol {
+      margin-left: 20px;
+    }
+
+    .figure {
+      margin: 20px 0 26px;
+      text-align: center;
+    }
+
+    .figure img {
+      max-width: 100%;
+      border: 1px solid #d5dfeb;
+      border-radius: 10px;
+      box-shadow: 0 4px 18px rgba(31, 75, 143, 0.08);
+    }
+
+    .caption {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid #d7e0ea;
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #ebf3fb;
+      color: var(--ink);
+      text-align: left;
+    }
+
+    .contrib {
+      background: linear-gradient(180deg, #f9fbfe 0%, #f3f8fd 100%);
+      border-left: 5px solid var(--teal);
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+
+    .member-block {
+      border: 1px solid #d7e3ee;
+      border-radius: 12px;
+      padding: 18px;
+      margin: 18px 0;
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+    }
+
+    .member-head {
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .member-role {
+      color: var(--teal);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .small {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        width: auto;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+
+      .page:last-child {
+        page-break-after: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <div class="cover-line"></div>
+
+    <div>
+      <div class="dept">DEPARTMENT OF COMPUTER ENGINEERING</div>
+      <div class="faculty">Faculty of Engineering, University of Peradeniya</div>
+      <div class="course">CO326 - Edge AI / Industrial IoT</div>
+
+      <div class="title-wrap">
+        <h1 class="title-main">Fire/Smoke Detection System</h1>
+        <div class="title-accent">Edge AI</div>
+        <div class="subtitle">Mini Project Report</div>
+      </div>
+
+      <hr class="cover-divider" />
+
+      <div class="group-block">Group 13</div>
+      <div class="members">
+        E/20/016 - Amarakeerthi H.K.K.G.<br />
+        E/20/231 - T.W.K.J. Madura<br />
+        E/20/404 - Ukwaththa U.A.N.T.
+      </div>
+    </div>
+
+    <div class="cover-line"></div>
+  </section>
+
+  <section class="page page-break">
+    <h1 class="section-title">Abstract</h1>
+
+    <p>This project presents an Edge AI based fire and smoke monitoring system designed for industrial environments. The system combines simulated gas sensor data, machine learning based anomaly detection, MQTT messaging, a Node-RED dashboard, and an exhaust fan actuator to support real-time hazard detection and response. Based on the repository and attached project materials, the solution was designed around a four-layer architecture consisting of perception, edge intelligence, transport, and application layers. The implementation uses CO gas readings from the UCI Air Quality dataset, an Isolation Forest model for anomaly detection, Docker Compose for multi-service deployment, and MQTT for lightweight publish-subscribe communication. The final outcome is a modular industrial IoT prototype that demonstrates how edge analytics, visualization, and automated control can be integrated into a fire monitoring workflow.</p>
+
+    <h2>1. Introduction</h2>
+    <p>Industrial fire monitoring requires fast detection, reliable messaging, and clear operator visibility. Traditional threshold-only systems can miss subtle abnormal patterns or generate unnecessary alarms. This project addresses that problem by combining threshold-based detection for immediate high-risk conditions with machine learning based anomaly detection for unusual but potentially dangerous behavior. The project was developed as an industrial networks and edge AI system, with the goal of showing how sensing, analytics, messaging, dashboards, and actuation can be integrated into a single deployable pipeline.</p>
+
+    <h2>2. Project Objectives</h2>
+    <ol>
+      <li>To simulate industrial gas sensor readings using a real dataset.</li>
+      <li>To detect dangerous or abnormal CO behavior using an edge AI model.</li>
+      <li>To communicate readings and alerts using MQTT.</li>
+      <li>To visualize system state in real time using a dashboard.</li>
+      <li>To control an exhaust fan automatically and manually.</li>
+      <li>To package the solution in a containerized multi-service deployment.</li>
+      <li>To improve reliability and move toward authenticated MQTT communication.</li>
+    </ol>
+
+    <h2>3. System Overview and Architecture <span class="reg-tag">[E/20/231]</span></h2>
+    <p>The proposed system is an Edge AI–based fire detection and monitoring solution designed to provide real-time industrial safety through a structured data pipeline. It begins with the perception layer, where an MQ-7 carbon monoxide (CO) gas sensor continuously measures gas concentration levels in parts per million (ppm). This raw sensor data is then processed in the edge AI layer, where a Python-based model performs data preprocessing, anomaly detection using an Isolation Forest algorithm, and threshold-based fire detection. By executing these computations locally, the system ensures low latency and reduces dependency on cloud services. The processed results are transmitted through the transport layer, which utilizes an MQTT broker (Mosquitto) to enable lightweight, secure, and real-time communication using a publish/subscribe mechanism. Relevant topics are used to send sensor readings and alert statuses efficiently. Finally, in the application layer, a Node-RED dashboard provides an intuitive interface for visualizing gas levels, trends, and system status, while also displaying alerts such as normal, anomaly, or fire conditions. Overall, the system follows a modular four-layer architecture that ensures scalability, efficient communication, and rapid response, making it highly suitable for real-time industrial monitoring and fire detection applications.</p>
+
+    <div class="figure">
+      <img src="assets/slide2_architecture.png" alt="System architecture" />
+      <div class="caption">Figure 1. System architecture.</div>
+    </div>
+
+    <div class="figure">
+      <img src="assets/slide3_data_flow.png" alt="System data flow" />
+      <div class="caption">Figure 2. End-to-end data flow across the sensor, broker, edge AI, and dashboard layers.</div>
+    </div>
+  </section>
+
+  <section class="page page-break">
+    <h2>4. Methodology and Implementation</h2>
+
+    <h3>4.1 Data Source and Sensor Simulation <span class="reg-tag">[E/20/016]</span></h3>
+    <p>The project uses the Air Quality dataset. The simulation pipeline uses the <code>CO(GT)</code> column as the primary sensor variable. Before use, the data is cleaned by converting comma-based decimals into numeric values, removing invalid readings such as <code>-200</code>, and dropping missing values. There are 7,674 valid CO samples with a minimum value of 0.1, a maximum value of 11.9, and an average of 2.1527. The mqtt publisher iterates through these values and injects additional anomalies with a 5 percent probability to simulate fire-like spikes.</p>
+
+    <h3>4.2 Edge AI Model <span class="reg-tag">[E/20/016]</span></h3>
+    <p>The anomaly detector was built using StandardScaler for feature normalization and IsolationForest with n_estimators=200, contamination rate 0.05, and random state 42. Used CO as a single-feature input after renaming CO(GT) to CO.</p>
+
+    <p>The evaluation metrics are:</p>
+    <ul>
+      <li>Accuracy: 0.9841021631482929</li>
+      <li>Precision: 0.7936507936507936</li>
+      <li>Recall: 0.872093023255814</li>
+    </ul>
+
+    <div class="figure">
+      <img src="assets/slide8_co_anomaly.png" alt="CO anomaly detection slide" />
+      <div class="caption">Figure 3. CO anomaly detection visual</div>
+    </div>
+
+    <div class="figure">
+      <img src="assets/ml_anomaly_plot.png" alt="ML anomaly plot" />
+      <div class="caption">Figure 4. CO anomaly plot from the training artifacts.</div>
+    </div>
+
+    <div class="figure">
+      <img src="assets/ml_score_plot.png" alt="ML score plot" />
+      <div class="caption">Figure 5. Anomaly score plot from the training artifacts.</div>
+    </div>
+
+    <h3>4.3 Hybrid Detection Logic <span class="reg-tag">[E/20/404]</span></h3>
+    <p>The runtime detector in edge_ai.py combines machine learning and explicit threshold logic. The code classifies messages as <code>FIRE (Threshold)</code> if gas is greater than 8 ppm, <code>ANOMALY (ML)</code> if the model flags an anomaly, and <code>Normal</code> otherwise. This hybrid approach is useful because threshold logic handles obvious emergency conditions while anomaly detection can highlight abnormal behavior before it becomes an extreme reading.</p>
+
+    <h3>4.4 MQTT Communication <span class="reg-tag">[E/20/404], [E/20/231] </span></h3>
+    <p>The project uses MQTT as the messaging backbone. The repository currently shows message exchange between the publisher, edge detector, actuator controller, and Node-RED dashboard. The implementation uses topic paths under <code>factory/group01/fire/...</code></p>
+
+    <div class="figure">
+      <img src="assets/slide9_mqtt_uns.png" alt="MQTT and UNS" />
+      <div class="caption">Figure 6. MQTT and Unified Namespace concept.</div>
+    </div>
+  </section>
+
+  <section class="page page-break">
+    <h3>4.5 Dashboard and Actuator Control <span class="reg-tag">[E/20/404, E/20/231]</span></h3>
+    <p>The live operator interface built with Node-RED Dashboard components, including a gas gauge, line chart for gas trend, status text display, alert display, fan ON button, fan OFF button, fan AUTO button, and fan state text. The actuator module in actuator_controller supports AUTO mode, where the fan state is determined by gas threshold or anomaly detection, and MANUAL mode, where the operator explicitly sends ON or OFF commands from the dashboard.</p>
+
+    <div class="figure">
+      <img src="assets/slide4_dashboard.png" alt="Dashboard interface" style="max-width:420px;" />
+      <div class="caption">Figure 7. Dashboard interface</div>
+    </div>
+
+    <h3>4.6 Containerized Deployment <span class="reg-tag">[E/20/016]</span></h3>
+    <p>Docker-compose defines three main services: <code>mqtt</code> for the Mosquitto broker, <code>node-red</code> for visualization and control, and <code>python-edge</code> for the data publisher and detector. This deployment structure supports easier setup, service isolation, and repeatable testing. The Python container is built from <code>python/Dockerfile</code>, while the broker uses a custom Mosquitto image from <code>mosquitto/Dockerfile</code>.</p>
+
+    <h2>5. Results and Discussion <span class="reg-tag">[E/20/404]</span></h2>
+    <p>The project successfully demonstrates real-time streaming of gas data through MQTT, local anomaly detection using an edge AI model, hybrid classification of normal, anomaly, and fire states, live dashboard visualization of values and alerts, automatic and manual control of an exhaust fan actuator, and multi-container orchestration using Docker Compose. The system design also shows good modular separation between sensing, analytics, messaging, user interface, and actuation.</p>
+
+    <h2>6. Security and Reliability <span class="reg-tag">[E/20/231]</span></h2>
+    <p>For security, MQTT authentication is implemented using a username and password, with the Mosquitto broker configured to allow only credential-based access. This ensures that only authorized clients can connect to the messaging system, thereby preventing unauthorized data transmission and enhancing overall system protection. In terms of reliability, an automatic MQTT reconnection mechanism is integrated into the Edge AI module. This enables the system to detect connection losses, automatically attempt reconnection, and recover without requiring manual intervention. As a result, the system maintains continuous operation, improves fault tolerance, and ensures consistent data flow even in the presence of network disruptions.</p>
+
+  </section>
+ <section class="page page-break">
+    <h2>7. Challenges and Limitations</h2>
+    <ol>
+      <li>The dataset is file-based and simulated rather than streamed from a physical sensor.</li>
+    </ol>
+
+    <h2>8. Future Improvements</h2>
+    <ol>
+      <li>Replace simulated input with live gas sensor hardware.</li>
+      <li>Add persistent storage for historical readings and alert analytics.</li>
+      <li>Introduce stronger validation using labeled hazard datasets or controlled experiments.</li>
+    </ol>
+
+    <h2>9. Conclusion</h2>
+    <p>The Fire/Smoke Detection System is a well-structured industrial IoT prototype that combines edge analytics, MQTT communication, live visualization, and actuator control into a unified workflow. The project demonstrates how anomaly detection can improve fire monitoring beyond simple threshold rules and how containerized deployment can simplify multi-service system integration. Overall, this project is a strong demonstration of applied edge AI for industrial safety, with a clear path toward stronger security, hardware integration, and production readiness.</p>
+
+    <h2>10. References</h2>
+
+    <ol start="1">
+      <li>UCI Machine Learning Repository. Air Quality Dataset. Available at: https://archive.ics.uci.edu/dataset/387/air%2Bquality</li>
+      <li>scikit-learn documentation. IsolationForest. Available at: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html</li>
+      <li>OASIS Standard. MQTT Version 3.1.1. Available at: https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html</li>
+      <li>Docker Docs. Docker Compose. Available at: https://docs.docker.com/compose/ </li>
+      <li>Node-RED Documentation. Available at: https://nodered.org/docs/ </li>
+      <li>Node-RED Flow Library. <code>node-red-dashboard</code>. Available at: https://flows.nodered.org/node/node-red-dashboard </li>
+      <li>Eclipse Mosquitto Documentation. Authentication methods. Available at: https://mosquitto.org/documentation/authentication-methods/</li>
+    </ol>
+    </section>
+  </section>
+</body>
+</html>
