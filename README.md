@@ -3,7 +3,7 @@
 An industrial IoT solution for real-time fire detection using machine learning anomaly detection, MQTT messaging, automated actuator control, and live dashboard visualization.
 
 ### Project Report
-See [Project Report](docs/Project%20Report.pdf)
+[📄 View Project Report](docs/Project%20Report.pdf)
 
 ## ✨ Features
 
